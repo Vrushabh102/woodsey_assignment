@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:woodesy_assignment/firebase_options.dart';
 
 Future<void> initializeService() async {
@@ -30,7 +31,7 @@ void onStart(ServiceInstance service) {
   service.on('stopService').listen((event) {
     service.stopSelf();
   });
-  Timer.periodic(Duration(minutes: 1), (timer) async {
+  Timer.periodic(Duration(minutes: 4), (timer) async {
     Position position = await Geolocator.getCurrentPosition();
     String timestamp = DateTime.now().toIso8601String();
 
