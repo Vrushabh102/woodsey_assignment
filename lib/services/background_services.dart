@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:woodesy_assignment/firebase_options.dart';
 
 Future<void> initializeService() async {
   final service = FlutterBackgroundService();
@@ -27,16 +30,22 @@ void onStart(ServiceInstance service) {
   service.on('stopService').listen((event) {
     service.stopSelf();
   });
-
   Timer.periodic(Duration(minutes: 1), (timer) async {
     Position position = await Geolocator.getCurrentPosition();
-    log('Background Location: ${position.latitude}, ${position.longitude}');
+    String timestamp = DateTime.now().toIso8601String();
 
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+    // getting firebase firestore instance
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    // Store in Firestore
+    await firestore.collection('current_location').add({
+      'latitude': position.latitude,
+      'longitude': position.longitude,
+      'timestamp': timestamp,
+    });
+
+    log('Location stored: ${position.latitude}, ${position.longitude}');
   });
-}
-
-// fun to save location to firebase firestore
-void saveLocationToFirebase() {
-  
-
 }

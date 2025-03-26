@@ -40,7 +40,15 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
               ? Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Text('Loading the map'), CircularProgressIndicator()],
+                  children: [
+                    Text('Loading the map'),
+                    SizedBox(width: 4),
+                    SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(strokeWidth: 1.5, color: Colors.black),
+                    ),
+                  ],
                 ),
               )
               : GoogleMap(
